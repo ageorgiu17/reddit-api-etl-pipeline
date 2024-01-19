@@ -1,4 +1,4 @@
-from .data_csvq import RawDataCsv
+from .data_csv import RawDataCsv
 import pandas as pd
 
 
