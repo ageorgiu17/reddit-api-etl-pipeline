@@ -9,4 +9,4 @@ def main():
 if __name__ == '__main__':
     main()
 
-    # TODO - create new file for csv export
+    # TODO - upload the files to Amazon S3
