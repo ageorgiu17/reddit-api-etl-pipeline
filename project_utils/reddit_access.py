@@ -7,11 +7,11 @@ import requests
 
 class RedditAccessToken:
     def __init__(self):
-        self.client_id = os.environ.get('CLIENT_ID')
-        self.client_secret = os.environ.get('CLIENT_SECRET')
+        self.client_id = os.environ.get('REDDIT_CLIENT_ID')
+        self.client_secret = os.environ.get('REDDIT_CLIENT_SECRET')
         self.grant_type = "password"
-        self.username = os.environ.get('USERNAME')
-        self.password = os.environ.get('PASSWORD')
+        self.username = os.environ.get('REDDIT_USERNAME')
+        self.password = os.environ.get('REDDIT_PASSWORD')
         self.auth = None
         self.data = None
         self.headers = None
@@ -53,5 +53,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# TODO - create the environment variables for this code
 # TODO - move the request to a new file
