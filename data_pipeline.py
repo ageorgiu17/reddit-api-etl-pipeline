@@ -7,11 +7,11 @@ import os
 TIMESTAMP = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
 DATA_DIR = "/Users/andreigeorgiu/Projects/ETL_Pipelines/reddit_data"
 
-def main():
 
+def main():
     data_export = DataExport(TIMESTAMP)
     data_export.export_data()
-    
+
     s3_upload = S3Upload()
     for file in os.listdir(f"{DATA_DIR}/files"):
         if file.endswith(".csv"):

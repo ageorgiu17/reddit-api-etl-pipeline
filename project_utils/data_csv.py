@@ -27,7 +27,8 @@ class RawDataCsv:
             }, ignore_index=True)
         return self.comments_df
 
-    def create_submission_data(self, res):
+    @staticmethod
+    def create_submission_data(res):
         df = pd.DataFrame()
         for post in res.json()['data']['children']:
             df = df._append({
@@ -55,4 +56,3 @@ class RawDataCsv:
             res = self.r.make_request(f"https://oauth.reddit.com/r/all/{submission_type}", 100)
             self.new_submissions_df = self.create_submission_data(res)
             return self.new_submissions_df
-
