@@ -17,15 +17,5 @@ class S3Upload:
                                       )
 
     def upload_file(self, file_path, object_name):
+        print(f'Uploading {file_path} to {self.s3_bucket}/{object_name}')
         self.s3_client.upload_file(file_path, self.s3_bucket, object_name)
-
-
-def main():
-    s3 = S3Upload()
-    print('uplodaing...')
-    s3.upload_file('./files/comments_data.csv', 'test_upload')
-    print('done')
-
-
-if __name__ == '__main__':
-    main()

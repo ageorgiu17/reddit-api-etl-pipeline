@@ -1,4 +1,4 @@
-from reddit_requests import RedditRequests
+from .reddit_requests import RedditRequests
 import pandas as pd
 
 
