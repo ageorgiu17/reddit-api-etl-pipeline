@@ -38,19 +38,3 @@ class RedditAccessToken:
         headers = {**self.headers, **{"Authorization": f"Bearer {self.__TOKEN}"}}
         return headers
 
-
-def main():
-    reddit_access = RedditAccessToken()
-    headers = reddit_access.oauth()
-
-    res = requests.get("https://oauth.reddit.com/r/python/hot",
-                       headers=headers, params={"limit": "10"})
-
-    for post in res.json()["data"]["children"]:
-        print(post["data"])
-
-
-if __name__ == "__main__":
-    main()
-
-# TODO - move the request to a new file
