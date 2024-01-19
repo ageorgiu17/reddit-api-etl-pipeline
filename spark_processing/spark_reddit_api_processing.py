@@ -55,6 +55,8 @@ class SparkRedditAPIProcessing:
         return df1.union(df2)
 
     def process(self):
+        self.set_spark_aws_options()
+        self.get_spark_raw_dataframes()
         sub = self.create_new_dataframe(self.submission_df)
         com = self.create_new_dataframe(self.comments_df)
 
