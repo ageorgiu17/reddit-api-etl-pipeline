@@ -20,10 +20,10 @@ class S3Upload:
 
     @staticmethod
     def create_config_dict(name):
-        if 'config.ini' in os.listdir():
+        if 'local_config.ini' in os.listdir():
             print('Creating the config for the current class ...')
             config = configparser.ConfigParser()
-            config.read('config.ini')
+            config.read('local_config.ini')
             return config[name]
         else:
             print("Config file not found")
