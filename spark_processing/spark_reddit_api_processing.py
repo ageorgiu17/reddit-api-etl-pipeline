@@ -2,6 +2,8 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, from_unixtime
 import os
 import pandas as pd
+import configparser
+from pipeline_utils import get_config_param
 
 
 # Create a SparkSession
@@ -9,9 +11,12 @@ import pandas as pd
 class SparkRedditAPIProcessing:
 
     def __init__(self):
-        self.aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
-        self.aws_access_secret_key = os.getenv('AWS_SECRET_ACCESS_KEY')
-        self.spark_app_name = os.getenv('SPARK_APP_NAME')
+        self.config_dict = self.create_config_dict(self.__class__.__name__)
+        self.aws_access_key_id = get_config_param("AWS_ACCESS_KEY_ID", config_dict=self.config_dict)
+        self.aws_access_secret_key = get_config_param("AWS_SECRET_ACCESS_KEY", config_dict=self.config_dict)
+        self.spark_app_name = get_config_param("SPARK APP NAME", config_dict=self.config_dict)
+        self.submission_df_path = get_config_param("SUBMISSION_DF", config_dict=self.config_dict)
+        self.comments_df_path = get_config_param("COMMENTS_DF", config_dict=self.config_dict)
 
         self.spark = SparkSession.builder \
             .appName(self.spark_app_name) \
@@ -22,6 +27,17 @@ class SparkRedditAPIProcessing:
 
         print("SPARK SESSION CREATED")
 
+    @staticmethod
+    def create_config_dict(name):
+        if 'config.ini' in os.listdir():
+            print('Creating the config for the current class ...')
+            config = configparser.ConfigParser()
+            config.read('config.ini')
+            return config[name]
+        else:
+            print("Config file not found")
+            return None
+
     def set_spark_aws_options(self):
         self.spark._jsc.hadoopConfiguration().set("fs.s3a.access.key", self.aws_access_key_id)
         self.spark._jsc.hadoopConfiguration().set("fs.s3a.secret.key", self.aws_access_secret_key)
@@ -29,8 +45,8 @@ class SparkRedditAPIProcessing:
         print('SPARK AWS CONFIGURED')
 
     def get_spark_raw_dataframes(self):
-        self.submission_df = self.spark.read.csv('s3a://bucket_name/hot_submissions_data_timestamp.csv', header=True)
-        self.comments_df = self.spark.read.csv('s3a://bucket_name/comments_data_timestamp.csv', header=True)
+        self.submission_df = self.spark.read.csv(self.submission_df_path, header=True)
+        self.comments_df = self.spark.read.csv(self.comments_df_path, header=True)
 
     @staticmethod
     def create_new_dataframe(df):
