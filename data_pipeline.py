@@ -14,7 +14,7 @@ def main():
 
     s3_upload = S3Upload()
     for file in os.listdir(f"{DATA_DIR}/files"):
-        if file.endswith(".csv"):
+        if file.endswith(f"{TIMESTAMP}.csv"):
             print("Processing")
             file_path = f"{DATA_DIR}/files/{file}"
             s3_upload.upload_file(file_path, f"{file}")
