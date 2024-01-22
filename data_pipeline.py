@@ -3,6 +3,8 @@ from datetime import datetime
 from project_utils.data_export import DataExport
 from aws_utils.s3_upload import S3Upload
 import os
+import subprocess
+
 
 TIMESTAMP = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
 DATA_DIR = "/Users/andreigeorgiu/Projects/ETL_Pipelines/reddit_data"
@@ -23,4 +25,4 @@ def main():
 if __name__ == '__main__':
     main()
 
-    # TODO - process the data using spark
+    # TODO - add all this to Airflow

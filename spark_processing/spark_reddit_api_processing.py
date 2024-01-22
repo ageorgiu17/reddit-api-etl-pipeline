@@ -17,6 +17,7 @@ class SparkRedditAPIProcessing:
         self.spark_app_name = get_config_param("SPARK APP NAME", config_dict=self.config_dict)
         self.submission_df_path = get_config_param("SUBMISSION_DF", config_dict=self.config_dict)
         self.comments_df_path = get_config_param("COMMENTS_DF", config_dict=self.config_dict)
+        self.final_df_path = get_config_param("FINAL_DF_PATH", config_dict=self.config_dict)
 
         self.spark = SparkSession.builder \
             .appName(self.spark_app_name) \
@@ -70,12 +71,24 @@ class SparkRedditAPIProcessing:
     def create_final_dataframe(df1, df2):
         return df1.union(df2)
 
+    def write_to_s3(self, df):
+        df.write.mode('overwrite').option("header", "true").csv(self.final_df_path)
+
     def process(self):
         self.set_spark_aws_options()
         self.get_spark_raw_dataframes()
         sub = self.create_new_dataframe(self.submission_df)
         com = self.create_new_dataframe(self.comments_df)
 
-        src_df = self.create_final_dataframe(sub, com)
+        df = self.create_final_dataframe(sub, com)
+        self.write_to_s3(df)
         self.stop_spark_session()
-        return src_df
+        return df
+
+
+if __name__ == '__main__':
+    spark_process = SparkRedditAPIProcessing()
+    src_df = spark_process.process()
+    print(f'SHOWING THE LENGTH OF FINAL DATAFRAME: {src_df.count()}')
+    print(f'SHOWING THE COLUMNS OF FINAL DATAFRAME: {src_df.columns}')
+    print(f'SHOWING THE FINAL DATAFRAME!: {src_df.show()}')
