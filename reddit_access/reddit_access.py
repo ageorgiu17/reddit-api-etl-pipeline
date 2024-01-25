@@ -1,10 +1,7 @@
 import os
 import requests
 import configparser
-from pipeline_utils import get_config_param
-
-
-# TODO - create reddit class for access token
+from pipeline_utils.utils import get_config_param
 
 
 class RedditAccessToken:

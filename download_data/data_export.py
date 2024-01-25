@@ -1,4 +1,4 @@
-from .data_csv import RawDataCsv
+from download_data.data_csv import RawDataCsv
 import pandas as pd
 
 

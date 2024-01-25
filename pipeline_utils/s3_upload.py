@@ -1,5 +1,5 @@
 import os
-from pipeline_utils import get_config_param
+from pipeline_utils.utils import get_config_param
 import boto3
 import configparser
 

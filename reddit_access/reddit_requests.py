@@ -1,4 +1,4 @@
-from .reddit_access import RedditAccessToken
+from reddit_access.reddit_access import RedditAccessToken
 import requests
 
 

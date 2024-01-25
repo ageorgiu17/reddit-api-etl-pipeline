@@ -3,7 +3,7 @@ from pyspark.sql.functions import col, from_unixtime
 import os
 import pandas as pd
 import configparser
-from pipeline_utils import get_config_param
+from pipeline_utils.utils import get_config_param
 
 
 # Create a SparkSession
@@ -18,6 +18,7 @@ class SparkRedditAPIProcessing:
         self.submission_df_path = get_config_param("SUBMISSION_DF", config_dict=self.config_dict)
         self.comments_df_path = get_config_param("COMMENTS_DF", config_dict=self.config_dict)
         self.final_df_path = get_config_param("FINAL_DF_PATH", config_dict=self.config_dict)
+        self.avro_df_path = get_config_param("AVRO_DF_PATH", config_dict=self.config_dict)
 
         self.spark = SparkSession.builder \
             .appName(self.spark_app_name) \
@@ -74,6 +75,9 @@ class SparkRedditAPIProcessing:
     def write_to_s3(self, df):
         df.write.mode('overwrite').option("header", "true").csv(self.final_df_path)
 
+    def write_avro_to_s3(self, df):
+        df.write.mode('overwrite').option("header", "true").avro(self.avro_df_path)
+
     def process(self):
         self.set_spark_aws_options()
         self.get_spark_raw_dataframes()
@@ -82,6 +86,7 @@ class SparkRedditAPIProcessing:
 
         df = self.create_final_dataframe(sub, com)
         self.write_to_s3(df)
+        self.write_avro_to_s3(df)
         self.stop_spark_session()
         return df
 
