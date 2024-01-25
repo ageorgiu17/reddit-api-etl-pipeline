@@ -88,12 +88,8 @@ class SparkRedditAPIProcessing:
         self.write_to_s3(df)
         self.write_avro_to_s3(df)
         self.stop_spark_session()
-        return df
 
 
 if __name__ == '__main__':
     spark_process = SparkRedditAPIProcessing()
-    src_df = spark_process.process()
-    print(f'SHOWING THE LENGTH OF FINAL DATAFRAME: {src_df.count()}')
-    print(f'SHOWING THE COLUMNS OF FINAL DATAFRAME: {src_df.columns}')
-    print(f'SHOWING THE FINAL DATAFRAME!: {src_df.show()}')
+    spark_process.process()
