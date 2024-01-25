@@ -32,3 +32,17 @@ class S3Upload:
     def upload_file(self, file_path, object_name):
         print(f'Uploading {file_path} to {self.raw_bucket_name}/{object_name}')
         self.s3_client.upload_file(file_path, self.raw_bucket_name, object_name)
+
+
+def main():
+    s3_upload = S3Upload()
+    DATA_DIR = ''
+    for file in os.listdir(f"{DATA_DIR}/files"):
+        if file.endswith(f"testing_timesptamp.csv"):
+            print("Processing")
+            file_path = f"{DATA_DIR}/downloaded_files/{file}"
+            s3_upload.upload_file(file_path, f"{file}")
+
+
+if __name__ == "__main__":
+    main()

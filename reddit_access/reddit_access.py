@@ -53,3 +53,11 @@ class RedditAccessToken:
         headers = {**self.headers, **{"Authorization": f"Bearer {self.__TOKEN}"}}
         return headers
 
+
+def main():
+    reddit_access_token = RedditAccessToken()
+    reddit_access_token.oauth()
+
+
+if __name__ == "__main__":
+    main()
